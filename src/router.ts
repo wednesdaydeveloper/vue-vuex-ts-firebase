@@ -2,15 +2,17 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import HelloWorld from '@/components/HelloWorld.vue';
 import About from '@/components/About.vue';
-import Signup from '@/components/Signup.vue';
-import Signin from '@/components/Signin.vue';
 import firebase from 'firebase/app';
-import 'firebase/auth';
+import config from '@/config';
+
+firebase.initializeApp(config);
 
 Vue.use(Router);
 
+const Signin = () => import('@/components/Signin.vue');
+
 const router = new Router({
-  // mode: 'history',
+  mode: 'history',
   // base: process.env.BASE_URL,
   routes: [
     {
@@ -26,12 +28,6 @@ const router = new Router({
       path: '/about',
       name: 'about',
       component: About,
-    },
-    {
-      path: '/signup',
-      name: 'Signup',
-      component: Signup,
-      meta: { isPublic: true },
     },
     {
       path: '/signin',

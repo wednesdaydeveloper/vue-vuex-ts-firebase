@@ -1,13 +1,26 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/signin">Signin</router-link>
+      <router-link v-show="loggedin()" to="/">Home</router-link>  &nbsp; 
+      <router-link v-show="loggedin()" to="/about">About</router-link> &nbsp; 
+      <router-link v-show="logouted()" to="/signin">Sign in</router-link> &nbsp; 
     </div>
     <router-view/>
   </div>
 </template>
+
+<script>
+import firebase from 'firebase/app';
+
+export default {
+  data() {
+    return {
+      loggedin: () => firebase.auth().currentUser !== null,
+      logouted: () => firebase.auth().currentUser === null,
+    };
+  },
+};
+</script>
 
 <style lang="scss">
 #app {

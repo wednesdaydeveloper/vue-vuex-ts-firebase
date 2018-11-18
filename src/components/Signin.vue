@@ -1,69 +1,35 @@
 <template>
   <div class="signin">
-    <h2>Sign in</h2>
-    <input type="text" placeholder="Username" v-model="username">
-    <input type="password" placeholder="Password" v-model="password">
-    <button @click="signIn">Signin</button>
-    <p>You don't have an account? 
-      <router-link to="/signup">create account now!!</router-link>
-    </p>
+    <div id="firebaseui-auth-container"></div>
+    <div id="loader">Loading...</div>
   </div>
 </template>
 
 <script>
 import firebase from 'firebase/app';
+import firebaseui from 'firebaseui';
 import 'firebase/auth';
 
 export default {
-  name: 'Signin',
-  data() {
-    return {
-      username: '',
-      password: '',
+  mounted() {
+    const uiConfig = {
+      signInFlow: 'popup',
+      signInSuccessUrl: '/',
+      callbacks: {
+        uiShown: () => document.getElementById('loader').style.display = 'none',
+      },
+      signInOptions: [
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+      ],
     };
-  },
-  methods: {
-    signIn() {
-      firebase.auth().signInWithEmailAndPassword(this.username, this.password).then(
-        (user) => {
-          const redirect = this.$route.query.redirect || '/';
-          this.$router.push(redirect);
-        },
-        (err) => {
-          alert(err.message);
-        },
-      );
-    },
+    const ui = new firebaseui.auth.AuthUI(firebase.auth());
+    ui.start('#firebaseui-auth-container', uiConfig);
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-.signin {
-  margin-top: 20px;
 
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center
-}
-input {
-  margin: 10px 0;
-  padding: 10px;
-}
 </style>

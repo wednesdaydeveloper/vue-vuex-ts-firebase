@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <h1>Hello {{ name }}!!</h1>
-    <h1>{{ msg }}</h1>
+    <h1>{{ json }}</h1>
     
     <button @click="signOut">Sign out</button>
   </div>
@@ -11,12 +11,9 @@
 import firebase from 'firebase/app';
 
 export default {
-  name: 'HelloWorld',
-  data() {
-    return {
-      msg: 'Welcome to Your Vue.js App',
-      name: firebase.auth().currentUser.email,
-    };
+  computed: {
+    name: () => firebase.auth().currentUser.email,
+    json: () => JSON.stringify(firebase.auth().currentUser),
   },
   methods: {
     signOut() {
