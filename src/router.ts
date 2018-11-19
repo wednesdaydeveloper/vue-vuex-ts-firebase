@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import HelloWorld from '@/components/HelloWorld.vue';
+import Home from '@/components/Home.vue';
 import About from '@/components/About.vue';
 import firebase from 'firebase/app';
 import config from '@/config';
@@ -21,8 +21,8 @@ const router = new Router({
     },
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld,
+      name: 'Home',
+      component: Home,
     },
     {
       path: '/about',
