@@ -1,25 +1,33 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link v-show="loggedin()" to="/">Home</router-link>  &nbsp; 
-      <router-link v-show="loggedin()" to="/about">About</router-link> &nbsp; 
-      <router-link v-show="logouted()" to="/signin">Sign in</router-link> &nbsp; 
+      <router-link v-show="loggedin" to="/">Home</router-link>  &nbsp; 
+      <router-link v-show="loggedin" to="/about">About</router-link> &nbsp; 
+      <router-link v-show="!loggedin" to="/signin">Sign In</router-link> &nbsp; 
     </div>
     <router-view/>
+    <button v-show="loggedin" @click="signOut">Sign out</button>
   </div>
 </template>
 
-<script>
-import firebase from 'firebase/app';
+<script lang="ts">
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import * as user from '@/store/modules/user';
 
-export default {
-  data() {
-    return {
-      loggedin: () => firebase.auth().currentUser !== null,
-      logouted: () => firebase.auth().currentUser === null,
-    };
-  },
-};
+@Component<App>({
+    computed: {
+        ...user.mapGetters(['loggedin']),
+    },
+    methods: {
+        ...user.mapActions(['logoutAction']),
+    },
+})
+export default class App extends Vue {
+  private signOut() {
+    this.logoutAction();
+  }
+}
 </script>
 
 <style lang="scss">

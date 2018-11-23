@@ -3,9 +3,6 @@ import Router from 'vue-router';
 import Home from '@/components/Home.vue';
 import About from '@/components/About.vue';
 import firebase from 'firebase/app';
-import config from '@/config';
-
-firebase.initializeApp(config);
 
 Vue.use(Router);
 

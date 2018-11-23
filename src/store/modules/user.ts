@@ -1,5 +1,7 @@
 import { createNamespacedHelpers } from 'vuex';
 import { DefineGetters, DefineMutations, DefineActions } from 'vuex-type-helper';
+import firebase from 'firebase/app';
+import router from '@/router';
 
 export interface State {
     uid: string | undefined;
@@ -7,55 +9,69 @@ export interface State {
 }
 
 export interface Getters {
-    // getterName: returnType
     uid: string | undefined;
     email: string | undefined;
     loggedin: boolean;
 }
 
+export interface UserPayload {
+    uid: string;
+    email: string;
+}
+
 export interface Mutations {
-    // mutationName: mutationPayloadType
-    setUser: {
-        uid: string,
-        email: string,
-    };
+    setUser: UserPayload;
+    logout: {};
 }
 
 export interface Actions {
-    setUserAction: {
-        uid: string,
-        email: string,
+    logoutAction: {};
+    signInAction: {
+        callback: any,
     };
 }
 
 const getters: DefineGetters<Getters, State> = {
     uid: (state) => state.uid,
-    email: (state) => state.email,
-    loggedin: (state) => state.email !== undefined && state.uid !== undefined,
+    email: (state: State) => state.email,
+    loggedin: (state) => state.email !== undefined,
 };
 
 const mutations: DefineMutations<Mutations, State> = {
     setUser(state, payload) {
         state.uid = payload.uid;
         state.email = payload.email;
+        router.push('/');
+    },
+    logout(state) {
+        state.uid = undefined;
+        state.email = undefined;
+        router.push('/signin');
     },
 };
 
 const actions: DefineActions<Actions, State, Mutations, Getters> = {
-    setUserAction({ commit }, payload) {
-        commit('setUser', payload);
+    logoutAction({ commit }) {
+        firebase.auth().signOut().then(() => {
+            commit('logout', {});
+        });
+    },
+    signInAction({ commit }, payload) {
+        payload.callback((p: UserPayload) => commit('setUser', p));
     },
 };
 
 export const {
     mapGetters,
-    mapMutations,
     mapActions,
 } = createNamespacedHelpers<State, Getters, Mutations, Actions>('user');
 
 export const user = {
     namespaced: true,
-    state: {},
+    state: {
+        uid: undefined,
+        email: undefined,
+    },
     getters,
     mutations,
     actions,
