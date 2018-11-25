@@ -3,6 +3,8 @@ node_modules
 coverage
 /dist
 
+# firebase cache file
+.firebase/*.cache
 # local env files
 .env.local
 .env.*.local
@@ -11,6 +13,7 @@ coverage
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+firebase-debug.log
 
 # Editor directories and files
 .idea
