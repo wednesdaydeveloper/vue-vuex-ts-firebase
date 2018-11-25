@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link v-show="loggedin" to="/">Home</router-link>  &nbsp; 
+      <router-link v-show="loggedin" to="/">Todo</router-link> &nbsp; 
       <router-link v-show="loggedin" to="/about">About</router-link> &nbsp; 
       <router-link v-show="!loggedin" to="/signin">Sign In</router-link> &nbsp; 
     </div>

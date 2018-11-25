@@ -24,7 +24,12 @@ const ui = new firebaseui.auth.AuthUI(firebase.auth());
 })
 export default class Signin extends Vue {
 
-  public signin() {
+  /**
+   * サインインのためのUIを表示する。
+   */
+  private signin() {
+
+    //  signInAction のためのコールバック関数
     const callback = (setUserFunc: (p: user.UserPayload) => void) => {
       const config: firebaseui.auth.Config = {
         signInFlow: 'popup',

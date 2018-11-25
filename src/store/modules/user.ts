@@ -2,6 +2,7 @@ import { createNamespacedHelpers } from 'vuex';
 import { DefineGetters, DefineMutations, DefineActions } from 'vuex-type-helper';
 import firebase from 'firebase/app';
 import router from '@/router';
+import 'firebase/auth';
 
 export interface State {
     uid: string | undefined;
@@ -51,13 +52,19 @@ const mutations: DefineMutations<Mutations, State> = {
 };
 
 const actions: DefineActions<Actions, State, Mutations, Getters> = {
-    logoutAction({ commit }) {
+    logoutAction({ commit, dispatch }) {
         firebase.auth().signOut().then(() => {
             commit('logout', {});
+            //  TodoのStateをクリア
+            dispatch('todo/clearStateAction', {}, { root: true });
         });
     },
-    signInAction({ commit }, payload) {
-        payload.callback((p: UserPayload) => commit('setUser', p));
+    signInAction({ commit, dispatch }, payload) {
+        payload.callback((p: UserPayload) => {
+            commit('setUser', p);
+            //  TodoのStateを初期化
+            dispatch('todo/initStateAction', {uid: p.uid}, { root: true });
+        });
     },
 };
 

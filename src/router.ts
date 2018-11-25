@@ -1,12 +1,16 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from '@/components/Home.vue';
+import Todo from '@/components/Todo.vue';
 import About from '@/components/About.vue';
 import firebase from 'firebase/app';
+import 'firebase/auth';
+
+
+import store from '@/store';
+
+const Signin  = () => import('@/components/Signin.vue');
 
 Vue.use(Router);
-
-const Signin = () => import('@/components/Signin.vue');
 
 const router = new Router({
   mode: 'history',
@@ -18,8 +22,8 @@ const router = new Router({
     },
     {
       path: '/',
-      name: 'Home',
-      component: Home,
+      name: 'Todo',
+      component: Todo,
     },
     {
       path: '/about',
@@ -39,7 +43,7 @@ router.beforeEach((to, from, next) => {
   const isPublic = to.matched.some((record) => record.meta.isPublic);
   if (!isPublic) {
     firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
+      if (user && store.getters['user/loggedin']) {
         next();
       } else {
         next({
