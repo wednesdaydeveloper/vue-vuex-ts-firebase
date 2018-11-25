@@ -54,9 +54,9 @@ export interface Actions {
 
 const getters: DefineGetters<Getters, State> = {
   items: (state) => {
-    let copyItems: TodoItem[] = [];
-    Object.assign(copyItems , state.items);
-    return copyItems.sort((a1: TodoItem, a2: TodoItem) => a1.createdAt > a2.createdAt ? 1 : -1);
+    // let copyItems: TodoItem[] = [];
+    // Object.assign(copyItems , state.items);
+    return state.items.slice().sort((a1: TodoItem, a2: TodoItem) => a1.createdAt > a2.createdAt ? 1 : -1);
   }
 };
 

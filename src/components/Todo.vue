@@ -9,7 +9,6 @@
                         :checked="item.done"
                         @change="toggle(item)" >
                     {{ item.content }}
-                    {{ item.createdAt.toDate() }}
                 </label>
             </li>
         </ul>
