@@ -1,24 +1,25 @@
 <template>
     <div>
-        <p v-if='empty()'>入力してください。</p>
+        <p v-if='empty()'>
+            <md-empty-state
+                class="md-primary"
+                md-icon="done"
+                md-label="Nothing in Done"
+                md-description="Todo を追加してください。">
+            </md-empty-state>
+        </p>
         <ul v-else>
             <li v-for="item in items" :key="item.id">
-                <label :class="{ done: item.done }">
-                    <input
-                        type="checkbox"
-                        :checked="item.done"
-                        @change="toggle(item)" >
+                <md-checkbox :value="!item.done" @change="toggle(item)" :class="{done: item.done}">
                     {{ item.content }}
-                </label>
+                </md-checkbox>
             </li>
         </ul>
-        <p>
-            <input class='add'
-                type="text"
-                v-model="todoContent"
-                placeholder="Todoを入力してください。"
-                v-on:keyup.enter="addContent">
-        </p>
+        <div class="md-layout md-alignment-top-center">
+            <md-field class="md-layout-item md-size-25">
+                <md-input v-model="todoContent" placeholder="Todoを入力してください。" v-on:keyup.enter="addContent"></md-input>
+            </md-field>
+        </div>
     </div>
 </template>
 
@@ -26,6 +27,11 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import * as todo from '@/store/modules/todo';
+import VueMaterial from 'vue-material';
+import 'vue-material/dist/vue-material.min.css';
+import 'vue-material/dist/theme/default.css';
+
+Vue.use(VueMaterial);
 
 @Component<Todo>({
   computed: {
@@ -59,6 +65,19 @@ export default class Todo extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .done {
-  text-decoration: line-through;
+    text-decoration: line-through;
+} 
+
+li {
+    list-style-type: none;
+}
+
+.md-empty-state {
+    display: inline-block;
+    vertical-align: middle;
+
+    + .md-empty-state {
+        margin-left: 16px;
+    }
 }
 </style>

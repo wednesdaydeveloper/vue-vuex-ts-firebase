@@ -1,12 +1,16 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link v-show="loggedin" to="/">Todo</router-link> &nbsp; 
+    <md-tabs v-show="loggedin" md-alignment="centered" md-sync-route>
+      <md-tab md-label="Todo" to="/"></md-tab>
+      <md-tab md-label="About" to="/about"></md-tab>
+    </md-tabs>
+      <!-- <router-link v-show="loggedin" to="/">Todo</router-link> &nbsp; 
       <router-link v-show="loggedin" to="/about">About</router-link> &nbsp; 
-      <router-link v-show="!loggedin" to="/signin">Sign In</router-link> &nbsp; 
+      <router-link v-show="!loggedin" to="/signin">Sign In</router-link> &nbsp;  -->
     </div>
     <router-view/>
-    <button v-show="loggedin" @click="signOut">Sign out</button>
+    <md-button v-show="loggedin" @click="signOut" class="md-raised md-primary">Sign out</md-button>
   </div>
 </template>
 
@@ -14,6 +18,10 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import * as user from '@/store/modules/user';
+import { MdButton, MdContent, MdTabs } from 'vue-material/dist/components';
+import 'vue-material/dist/vue-material.min.css';
+
+Vue.use(MdButton);
 
 @Component<App>({
     computed: {
