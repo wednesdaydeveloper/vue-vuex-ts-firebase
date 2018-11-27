@@ -16,6 +16,12 @@ firestore.settings({ timestampsInSnapshots: true });
 let collectionRef: firebase.firestore.CollectionReference | undefined;
 let unsubscribe: (() => void) | undefined;
 
+export enum FilterType {
+  All = 101,
+  Done,
+  UnDone,
+}
+
 //  Todo1件あたりのインターフェイス
 export interface TodoItem {
   content: string;
@@ -27,16 +33,19 @@ export interface TodoItem {
 
 export interface State {
   items: TodoItem[];
+  filterType: FilterType;
 }
 
 export interface Getters {
   items: TodoItem[];
+  filterName: string;
 }
 
 export interface Mutations {
   add: TodoItem;
   set: TodoItem;
   remove: TodoItem;
+  changeFilterType: FilterType;
   initState: {
     state: State,
   };
@@ -52,12 +61,26 @@ export interface Actions {
   clearStateAction: {};
 }
 
+function getFilter(filterType: FilterType): (ev: TodoItem) => boolean {
+  if (filterType === FilterType.Done) {
+    return (e: TodoItem) => e.done;
+  } else if (filterType === FilterType.UnDone) {
+    return (e: TodoItem) => !e.done;
+  } else {
+    return (e: TodoItem) => true;
+  }
+}
 const getters: DefineGetters<Getters, State> = {
   items: (state) => {
-    // let copyItems: TodoItem[] = [];
-    // Object.assign(copyItems , state.items);
-    return state.items.slice().sort((a1: TodoItem, a2: TodoItem) => a1.createdAt > a2.createdAt ? 1 : -1);
-  }
+    const predicate = getFilter(state.filterType);
+
+    return state.items.slice()
+      .filter(predicate)
+      .sort((a1: TodoItem, a2: TodoItem) => a1.createdAt > a2.createdAt ? 1 : -1);
+  },
+  filterName: (state) => {
+    return FilterType[state.filterType];
+  },
 };
 
 const mutations: DefineMutations<Mutations, State> = {
@@ -73,11 +96,15 @@ const mutations: DefineMutations<Mutations, State> = {
   remove(state, payload: TodoItem) {
     state.items = state.items.filter((item) => item.id === payload.id);
   },
+  changeFilterType(state, payload: FilterType) {
+    state.filterType = payload;
+  },
   initState(state, payload) {
     state.items = payload.items;
   },
   clearState(state) {
     state.items = [];
+    state.filterType = FilterType.All;
     collectionRef = undefined;
     if (unsubscribe) {
       unsubscribe();
@@ -143,6 +170,7 @@ const actions: DefineActions<Actions, State, Mutations, Getters> = {
 
 export const {
   mapGetters,
+  mapMutations,
   mapActions,
 } = createNamespacedHelpers<State, Getters, Mutations, Actions>('todo');
 
@@ -150,6 +178,7 @@ export const todo = {
   namespaced: true,
   state: {
     items: [],
+    filterType: FilterType.All,
   },
   getters,
   mutations,

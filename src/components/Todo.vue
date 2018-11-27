@@ -8,17 +8,31 @@
                 md-description="Todo を追加してください。">
             </md-empty-state>
         </p>
-        <ul v-else>
-            <li v-for="item in items" :key="item.id">
-                <md-checkbox :value="!item.done" @change="toggle(item)" :class="{done: item.done}">
-                    {{ item.content }}
-                </md-checkbox>
-            </li>
-        </ul>
+        <div v-else>
+            <div class="md-layout md-alignment-top-center">
+                <div>
+                    <md-radio v-model="filter" value="All"   >All</md-radio>
+                    <md-radio v-model="filter" value="Done"  >Done</md-radio>
+                    <md-radio v-model="filter" value="UnDone">UnDone</md-radio>
+                </div>
+            </div>
+            <div class="md-layout md-alignment-top-center">
+                <ul class="md-layout-item md-size-40">
+                    <div>
+                        <li v-for="item in items" :key="item.id" class="md-layout md-alignment-top-left">
+                            <md-checkbox :value="!item.done" @change="toggle(item)" :class="{done: item.done}">
+                                {{ item.content }}
+                            </md-checkbox>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+        </div>
         <div class="md-layout md-alignment-top-center">
-            <md-field class="md-layout-item md-size-25">
+            <md-field class="md-layout-item md-size-40">
                 <md-input v-model="todoContent" placeholder="Todoを入力してください。" v-on:keyup.enter="addContent"></md-input>
             </md-field>
+            <md-button @click="addContent" class="md-raised">追加</md-button>
         </div>
     </div>
 </template>
@@ -35,10 +49,21 @@ Vue.use(VueMaterial);
 
 @Component<Todo>({
   computed: {
-    ...todo.mapGetters(['items']),
+    ...todo.mapGetters(['items', 'filterName']),
+    filter: {
+        get() {
+            return this.filterName;
+        },
+        set(value) {
+            Object.entries(todo.FilterType).map(([key, value]) => value)
+                .filter(ft => todo.FilterType[ft] === value)
+                .forEach(ft => this.changeFilterType(ft));
+        },
+    },
   },
   methods: {
     ...todo.mapActions(['addAsync', 'setAsync']),
+    ...todo.mapMutations(['changeFilterType']),
   },
 })
 export default class Todo extends Vue {
