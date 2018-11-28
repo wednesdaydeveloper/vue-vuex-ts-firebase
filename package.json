@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "storybook": "start-storybook -p 8080 -c .storybook"
   },
   "dependencies": {
     "firebase": "^5.5.8",
@@ -22,6 +23,8 @@
     "vuex-type-helper": "^1.2.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@storybook/vue": "^4.0.9",
     "@types/jest": "^23.1.4",
     "@vue/cli-plugin-babel": "^3.1.1",
     "@vue/cli-plugin-pwa": "^3.1.1",
@@ -30,11 +33,14 @@
     "@vue/cli-service": "^3.1.1",
     "@vue/test-utils": "^1.0.0-beta.20",
     "babel-core": "7.0.0-bridge.0",
+    "babel-loader": "^8.0.4",
+    "babel-preset-vue": "^2.0.2",
     "firebase-tools": "^6.1.1",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
     "ts-jest": "^23.0.0",
     "typescript": "^3.0.0",
+    "vue-loader": "^15.4.2",
     "vue-template-compiler": "^2.5.17"
   }
 }
