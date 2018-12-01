@@ -11,9 +11,9 @@
         <div v-else>
             <div class="md-layout md-alignment-top-center">
                 <div>
-                    <md-radio v-model="filter" value="All"   >All</md-radio>
-                    <md-radio v-model="filter" value="Done"  >Done</md-radio>
-                    <md-radio v-model="filter" value="UnDone">UnDone</md-radio>
+                    <md-radio v-model="filter" value="All"        >全て</md-radio>
+                    <md-radio v-model="filter" value="Completed"  >完了のみ</md-radio>
+                    <md-radio v-model="filter" value="Incompleted">未完了のみ</md-radio>
                 </div>
             </div>
             <div class="md-layout md-alignment-top-center">
@@ -54,10 +54,10 @@ Vue.use(VueMaterial);
         get() {
             return this.filterName;
         },
-        set(value) {
-            Object.entries(todo.FilterType).map(([key, value]) => value)
-                .filter(ft => todo.FilterType[ft] === value)
-                .forEach(ft => this.changeFilterType(ft));
+        set(value: string) {
+            Object.entries(todo.FilterType).map(([key, v]) => v)
+                .filter((ft) => todo.FilterType[ft] === value)
+                .forEach((ft) => this.changeFilterType(ft));
         },
     },
   },

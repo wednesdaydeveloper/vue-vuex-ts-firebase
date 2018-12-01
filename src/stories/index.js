@@ -8,5 +8,5 @@ storiesOf('MyButton', module)
   .add('story as a template', () => '<my-button :rounded="true">story as a function template</my-button>')
   .add('story as a component', () => ({
     components: { MyButton },
-    template: '<my-button :rounded="true">rounded</my-button>'
+    template: '<my-button :rounded="true" text="aaa">rounded</my-button>'
   }));

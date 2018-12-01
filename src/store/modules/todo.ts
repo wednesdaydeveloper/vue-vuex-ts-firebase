@@ -18,8 +18,8 @@ let unsubscribe: (() => void) | undefined;
 
 export enum FilterType {
   All = 101,
-  Done,
-  UnDone,
+  Completed,
+  Incomplete,
 }
 
 //  Todo1件あたりのインターフェイス
@@ -62,9 +62,9 @@ export interface Actions {
 }
 
 function getFilter(filterType: FilterType): (ev: TodoItem) => boolean {
-  if (filterType === FilterType.Done) {
+  if (filterType === FilterType.Completed) {
     return (e: TodoItem) => e.done;
-  } else if (filterType === FilterType.UnDone) {
+  } else if (filterType === FilterType.Incomplete) {
     return (e: TodoItem) => !e.done;
   } else {
     return (e: TodoItem) => true;

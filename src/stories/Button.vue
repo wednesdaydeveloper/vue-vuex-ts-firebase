@@ -16,25 +16,25 @@
 export default {
   props: {
     text: {
-      type: String
+      type: String,
     },
     kind: {
-      type: String
+      type: String,
     },
     size: {
-      type: String
+      type: String,
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   methods: {
-    onclick (e) {
-      this.$emit('click', e)
-    }
-  }
-}
+    onclick(e) {
+      this.$emit('click', e);
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
