@@ -1,7 +1,6 @@
 <template>
   <div class="hello">
     <h1>email: {{ email }}</h1>
-    <h1>uid: {{ uid }}</h1>
     <h1>loggedin: {{ loggedin }}</h1>
   </div>
 </template>

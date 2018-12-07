@@ -4,12 +4,13 @@ import { DefineGetters, DefineMutations, DefineActions } from 'vuex-type-helper'
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import config from '@/config';
+// import config from '@/config';
 
-//  firebaseを初期化
-firebase.initializeApp(config);
+// //  firebaseを初期化
+// firebase.initializeApp(config);
 
 //  firestoreを初期化
+
 const firestore = firebase.firestore();
 firestore.settings({ timestampsInSnapshots: true });
 
@@ -140,6 +141,10 @@ const actions: DefineActions<Actions, State, Mutations, Getters> = {
     }
   },
   initStateAction({ commit }, { uid }) {
+    if (unsubscribe) {
+      unsubscribe();
+    }
+
     collectionRef = firestore.collection('users').doc(uid).collection('todolist');
 
     unsubscribe = collectionRef.onSnapshot((snapshot: firebase.firestore.QuerySnapshot) => {

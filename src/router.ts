@@ -1,14 +1,17 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Todo from '@/components/Todo.vue';
-import About from '@/components/About.vue';
+// import Todo from '@/components/Todo.vue';
+// import About from '@/components/About.vue';
+// import Chatroom from '@/components/Chatroom.vue';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
+const Todo  = () => import('@/components/Todo.vue');
+const About  = () => import('@/components/About.vue');
+const Chatroom  = () => import('@/components/Chatroom.vue');
+const Signin  = () => import('@/components/Signin.vue');
 
 import store from '@/store';
-
-const Signin  = () => import('@/components/Signin.vue');
 
 Vue.use(Router);
 
@@ -31,6 +34,11 @@ const router = new Router({
       component: About,
     },
     {
+      path: '/chatroom',
+      name: 'chatroom',
+      component: Chatroom,
+    },
+    {
       path: '/signin',
       name: 'Signin',
       component: Signin,
@@ -41,9 +49,17 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const isPublic = to.matched.some((record) => record.meta.isPublic);
-  if (!isPublic) {
+  if (isPublic) {
+    next();
+  } else {
     firebase.auth().onAuthStateChanged((user) => {
-      if (user && store.getters['user/loggedin']) {
+
+      if (user) {
+        if (!store.getters['user/loggedin']) {
+          store.commit('user/setUser', {uid: user.uid, email: user.email});
+          //  TodoのStateを初期化
+          store.dispatch('todo/initStateAction', {uid: user.uid}, { root: true });
+        }
         next();
       } else {
         next({
@@ -52,8 +68,6 @@ router.beforeEach((to, from, next) => {
         });
       }
     });
-  } else {
-    next();
   }
 });
 

@@ -3,11 +3,13 @@
     <div id="nav">
       <md-tabs v-show="loggedin" md-alignment="centered" md-sync-route>
         <md-tab md-label="Todo" to="/"></md-tab>
+        <md-tab md-label="Chatroom" to="/chatroom"></md-tab>
         <md-tab md-label="About" to="/about"></md-tab>
+
+        <md-tab md-label="Sign out" @click="signOut" class="md-raised md-primary"></md-tab>
       </md-tabs>
     </div>
     <router-view/>
-    <md-button v-show="loggedin" @click="signOut" class="md-raised md-primary">Sign out</md-button>
   </div>
 </template>
 
